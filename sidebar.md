@@ -5,4 +5,4 @@
 
 * 笔记
 
-    * [绕过frida](md1)
+    * [绕过frida](绕过frida.md)
