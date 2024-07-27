@@ -84,6 +84,7 @@ setImmediate(replace_thread)
 ### libexecmain.so、libexec.so
 
 https://iiong.com/reinforce-android-applications-for-unpacking-learning/
+
 ```
 var soaddr = null;
 function hook_dlopen(soName = "") {
@@ -145,6 +146,9 @@ setImmediate(hook_dlopen, "libexec.so");
 ```
 
 ### libdexjni.so
+
+https://showfaker.top/2024/03/20/bb-reverse-bypass/
+
 ```
 function printStack() {
     Java.perform(function () {
