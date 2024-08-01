@@ -4,7 +4,7 @@
     * [黑客拦截对抗](黑客拦截对抗.md)
 
 * 漏洞复现
-   * [minio复现踩坑](minio复现踩坑.md)
+   * [minio rce复现踩坑](minio rce复现踩坑.md)
 * 笔记
 
     * [绕过frida](绕过frida.md)
