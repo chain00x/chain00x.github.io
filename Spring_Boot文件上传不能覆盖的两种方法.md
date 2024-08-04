@@ -101,7 +101,7 @@ public class FileUploadController {
 
 <img width="1119" alt="image" src="https://github.com/user-attachments/assets/263bdabb-ad49-48a3-9c5f-14fd07089496">
 
-## 2.fastjson执行类反序列化（鸡肋）
+## 2.fastjson反序列化（鸡肋）
 
 在开始阅读之前请看前辈们的文章：https://github.com/LandGrey/spring-boot-upload-file-lead-to-rce-tricks
 
