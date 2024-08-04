@@ -2,7 +2,7 @@
 
     * [绕过frida检测抓取明文](绕过frida检测抓取明文.md)
     * [黑客拦截对抗](黑客拦截对抗.md)
-    * [Spring Boot文件上传不能覆盖的两种方法](Spring_Boot文件上传不能覆盖的两种方法.md)
+    * [Spring Boot文件上传不能覆盖的两种方法](Spring_Boot文件上传不能覆盖的两种RCE方法.md)
 
 * 漏洞复现
    * [minio rce复现踩坑](minio_rce复现踩坑.md)
