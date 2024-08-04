@@ -157,6 +157,8 @@ public class user2 extends user{
 }
 ```
 
+将jar包放到类加载的目录下
+
 当code.user2反序列化的时候就会执行Runtime.getRuntime().exec(name);
 
 <img width="1083" alt="image" src="https://github.com/user-attachments/assets/6a5056cf-1be5-489f-8ec5-9a7d8e766598">
