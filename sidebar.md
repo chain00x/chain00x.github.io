@@ -1,6 +1,4 @@
 * 文章
-
-    * [绕过frida检测抓取明文](绕过frida检测抓取明文.md)
     * [黑客拦截对抗](黑客拦截对抗.md)
     * [Spring Boot文件上传不能覆盖的两种RCE方法](Spring_Boot文件上传不能覆盖的两种RCE方法.md)
 
