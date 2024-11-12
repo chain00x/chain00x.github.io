@@ -1,0 +1,47 @@
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style>
+div{ border:3px solid #000} 
+</style>
+</head>
+<body>
+url: </br><input id="url" name="url" type="text" style="width:500px;"/>
+</br></br>body: </br><input id="body" name="body" type="text" style="width:500px;"/>
+</br></br><button type="button" onclick=exp()>OK</button>
+<script>
+function exp(){
+var url=document.getElementById("url").value;
+var body=document.getElementById("body").value;
+if(body==""){
+var code=`var req = new XMLHttpRequest();
+   req.onload = reqListener;
+   req.open('GET','${url}',true);
+    req.withCredentials = true;
+   req.send();
+
+   function reqListener() {
+       data=this.responseText
+      alert(data);};`
+}
+else{
+    var code=`var req = new XMLHttpRequest();
+   req.onload = reqListener;
+   req.open('POST','${url}',true);
+   req.setRequestHeader('Content-type','application/json');
+    req.withCredentials = true;
+   req.send('${body}');
+
+   function reqListener() {
+       data=this.responseText
+      alert(data);};`
+}
+if(url!="false"&url!=""){
+var div_code = document.createElement("div");
+document.body.append(div_code);
+div_code.innerText=code;
+}
+}
+</script>
+</body></html>
