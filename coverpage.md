@@ -4,4 +4,4 @@
 
 [阅读文档](#简介)
 
-[tools/cors.html](#CORS POC生成)
+[cors poc生成](#tools/cors.html)
