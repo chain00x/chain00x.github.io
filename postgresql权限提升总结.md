@@ -16,7 +16,7 @@ docker run --name my_postgres -e POSTGRES_PASSWORD=123456 -d -p 5432:5432 postgr
 
 ## 第一篇文章总结
 
-### 创建危险函数
+创建危险函数
 
 高权限用户运行
 
