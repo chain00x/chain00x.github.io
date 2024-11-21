@@ -169,7 +169,7 @@ ALTER TABLE blah SET (autovacuum_vacuum_threshold = 1);
 ALTER TABLE blah SET (autovacuum_analyze_threshold = 1);
 ```
 
-### SQL注入 高权限创建的函数
+## SQL注入 高权限创建的函数
 
 高权限创建的函数
 
@@ -185,7 +185,7 @@ ALTER TABLE blah SET (autovacuum_analyze_threshold = 1);
 INSERT INTO public.test3(data) VALUES(current_user);
 ```
 
-### postgresql用户组
+## postgresql用户组
 
 可以将表的owner给用户组
 
@@ -223,7 +223,7 @@ ANALYZE public.temp_table;
 
 ```
 
-### grant权限提权
+## grant权限提权
 
 直接创建一个有权限的用户
 
