@@ -16,7 +16,7 @@ docker pull postgres:10.0
 docker run --name my_postgres -e POSTGRES_PASSWORD=123456 -d -p 5432:5432 postgres:10.0
 ```
 
-### 信息收集涉及的语句
+## 信息收集涉及的语句
 
 #### 用户组、用户
 
