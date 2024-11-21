@@ -21,6 +21,11 @@ docker run --name my_postgres -e POSTGRES_PASSWORD=123456 -d -p 5432:5432 postgr
 #### 用户组、用户
 
 ```
+SELECT rolname, rolsuper, rolcreaterole, rolcreatedb, rolcanlogin, rolreplication, rolbypassrls
+FROM pg_roles;
+```
+
+```
 SELECT r.rolname AS role_name,
        CASE
            WHEN r.rolsuper THEN 'Superuser'
