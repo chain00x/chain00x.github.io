@@ -1,6 +1,6 @@
 ### okhttp拦截器
 
-```
+```js
 let RequestBody = Java.use("okhttp3.RequestBody");
 RequestBody["create"].overload('okhttp3.MediaType', 'java.lang.String').implementation = function (mediaType, str) {
     if (str.indexOf('{"cr":') == -1) {
@@ -52,7 +52,7 @@ FlowBaffleInterceptor["intercept"].implementation = function (chain) {
 
 ### 动态加载dex
 
-```
+```js
 function hook() {
     Java.perform(function () {
         Java.enumerateClassLoadersSync().forEach(function (classloader) {
@@ -71,7 +71,7 @@ function hook() {
 ```
 
 ### hook文件操作
-```
+```js
 Java.perform(function () {
     // 加入延迟，确保库已加载
     setTimeout(function() {
@@ -160,5 +160,25 @@ Java.perform(function () {
 
         console.log("Hook 已经设置");
     }, 1000); // 延迟 1 秒
+});
+```
+
+### frida hook 所有重载
+
+```js
+Java.perform(function () {
+    var MyClass = Java.use('skahr.d0');
+var overloads  = MyClass["a"].overloads;
+for (var i=0;i< overloads.length;i++){
+    overloads[i].implementation = function () {
+       var params = "";
+       for(var j=0;j<arguments.length;j++){
+        params = params +arguments[j]+" "
+       }
+       console.log("params",params)
+        
+        return this.a.apply(this,arguments);
+    };
+}
 });
 ```
