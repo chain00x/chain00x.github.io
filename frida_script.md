@@ -1,3 +1,8 @@
+### 转为string
+```js
+Java.use('java.lang.String').$new(params)
+```
+
 ### okhttp拦截器
 
 ```js
