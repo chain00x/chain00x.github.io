@@ -106,10 +106,10 @@ setImmediate(main);
 ```
 uc
 ```
-
 console.log("脚本加载成功");
 function main(){
     Java.perform(function(){
+
         var WebView = Java.use('com.uc.webview.export.WebView');
         WebView.$init.overload('android.content.Context').implementation = function(a){
             console.log('===hook===')
@@ -164,6 +164,9 @@ function main(){
             console.log('===hook===')
             this["setWebContentsDebuggingEnabled"](true);
         };
+WebView["getCoreType"].implementation = function () {
+    return 2;
+};
     });
 }
 setImmediate(main);
